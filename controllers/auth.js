@@ -11,17 +11,17 @@ function isStringInvalid(string) {
 }
 
 exports.signup = (req, res, next) => {
-  console.log(req.body);
   try {
     const { username, email, phone, password } = req.body;
-    console.log(username, email, phone, password);
     if (
       isStringInvalid(email) ||
       isStringInvalid(password) ||
       isStringInvalid(phone) ||
       isStringInvalid(username)
     ) {
-      return res.status(400).json({ err: "bad request. something is missing" });
+      return res
+        .status(400)
+        .json({ message: "bad request. something is missing" });
     } else {
       bcrypt.hash(password, 10, async (err, hash) => {
         if (err) {
@@ -39,7 +39,7 @@ exports.signup = (req, res, next) => {
             { id: result.id, username: result.username },
             process.env.TOKEN_KEY
           );
-          console.log(token, result.id, result.username);
+
           res.json({
             message: "Login Successful",
             userame: result.username,
@@ -48,11 +48,11 @@ exports.signup = (req, res, next) => {
             token: token,
           });
         } catch (err) {
-          res.status(403).json(err);
+          res.status(403).json({ message: "Email already Present" });
         }
       });
     }
   } catch (err) {
-    res.status(403).json(err);
+    res.status(403).json({ message: "Unknown error occured in backend" });
   }
 };
