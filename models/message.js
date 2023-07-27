@@ -8,7 +8,7 @@ const Message = sequelize.define("message", {
     allowNull: false,
     primaryKey: true,
   },
-  text: { type: Sequelize.STRING, allowNull: false },
+  msg: { type: Sequelize.STRING, allowNull: false },
 });
 
 module.exports = Message;
