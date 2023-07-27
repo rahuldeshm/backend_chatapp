@@ -8,6 +8,7 @@ const cors = require("cors");
 const User = require("./models/user");
 const Message = require("./models/message");
 const authenticate = require("./middleware/authenticate");
+const { socketFns } = require("./socket/socket");
 
 const app = express();
 
@@ -22,5 +23,11 @@ User.hasMany(Message);
 Message.belongsTo(User);
 
 sequelize.sync().then(() => {
-  app.listen(3001);
+  let server = app.listen(3001);
+  const io = require("socket.io")(server, {
+    cors: {
+      origin: "http://localhost:3000",
+    },
+  });
+  io.on("connection", socketFns);
 });
