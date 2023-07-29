@@ -8,6 +8,7 @@ const authenticate = (req, res, next) => {
     User.findByPk(userId.id)
       .then((user) => {
         req.user = user;
+        console.log(">>>>>> authorised");
         next();
       })
       .catch((err) => console.log(err));

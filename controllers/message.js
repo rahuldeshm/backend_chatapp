@@ -1,3 +1,4 @@
+const Sequelize = require("sequelize");
 const Message = require("../models/message");
 const User = require("../models/user");
 
@@ -18,7 +19,12 @@ exports.newmessage = async (req, res, next) => {
 exports.getmessages = async (req, res, next) => {
   try {
     const resp = await Message.findAll({
-      where: { groupId: req.params.id },
+      where: {
+        groupId: req.params.id,
+        id: {
+          [Sequelize.Op.gt]: req.body.haveId,
+        },
+      },
       include: [
         {
           model: User,
