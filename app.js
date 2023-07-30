@@ -10,6 +10,7 @@ const Message = require("./models/message");
 const authenticate = require("./middleware/authenticate");
 const Group = require("./models/group");
 const groupRoutes = require("./routes/group");
+const Usergroup = require("./models/usergroup");
 // const { socketRoutes } = require("./routes/socket");
 // const { socketauth } = require("./middleware/socketauth");
 
@@ -26,8 +27,8 @@ app.use("/group", authenticate, groupRoutes);
 User.hasMany(Message);
 Message.belongsTo(User);
 
-User.belongsToMany(Group, { through: "UserGroup" });
-Group.belongsToMany(User, { through: "UserGroup" });
+User.belongsToMany(Group, { through: Usergroup });
+Group.belongsToMany(User, { through: Usergroup });
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
