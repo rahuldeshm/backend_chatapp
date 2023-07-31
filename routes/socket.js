@@ -1,15 +1,29 @@
-// const socketController = require("../controllers/socket");
-
-// exports.socketRoutes = (socket) => {
-//   socket.on("new-user-joined", (socket, name) => {
-//     console.log(socket.id, "<<<<<");
-//     users[socket.id] = name;
-//     socket.broadcast.emit("user-joined", name);
-//   });
-
-//   socket.on("send", socketController.newMessage);
-//   socket.on("disconnect", (message) => {
-//     socket.broadcast.emit("left", users[socket.id]);
-//     delete users[socket.id];
-//   });
-// };
+exports.socketRoutes = (socket) => {
+  //   console.log(socket.user.username);
+  socket.on("createroom", (roomname) => {
+    console.log(roomname, socket.user.username, "joined");
+    socket.join(roomname);
+    socket
+      .to(roomname)
+      .emit("becamelive", { user: socket.user, msg: "JOINED" });
+  });
+  socket.on("send", (message, roomname) => {
+    console.log(socket.adapter.rooms.get(roomname));
+    socket.to(roomname).emit("receive", {
+      user: socket.user,
+      msg: message,
+    });
+  });
+  socket.on("leaveroom", (roomname) => {
+    console.log(roomname, socket.user.username, "leaved");
+    socket.leave(roomname);
+    socket
+      .to(roomname)
+      .emit("becamelive", { user: socket.user, msg: "LEAVED" });
+  });
+  socket.on("disconnect", () => {
+    console.log(socket.user.username, "disconnected");
+    // socket.broadcast.emit("left", users[socket.id]);
+    // delete users[socket.id];
+  });
+};

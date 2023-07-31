@@ -148,7 +148,6 @@ exports.editAdmins = async (req, res, next) => {
             userId: user.id,
           },
         });
-        console.log(user.isAdmin);
         usergr.isAdmin = user.isAdmin;
         usergr.save();
       } catch (err) {

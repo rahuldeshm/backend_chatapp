@@ -11,6 +11,8 @@ const authenticate = require("./middleware/authenticate");
 const Group = require("./models/group");
 const groupRoutes = require("./routes/group");
 const Usergroup = require("./models/usergroup");
+const { socketRoutes } = require("./routes/socket");
+const { socketauth } = require("./middleware/socketauth");
 // const { socketRoutes } = require("./routes/socket");
 // const { socketauth } = require("./middleware/socketauth");
 
@@ -35,11 +37,11 @@ Message.belongsTo(Group);
 
 sequelize.sync().then(() => {
   let server = app.listen(3001);
-  // const io = require("socket.io")(server, {
-  //   cors: {
-  //     origin: "http://localhost:3000",
-  //   },
-  // });
-  // // io.use(socketauth);
-  // io.on("connection", socketRoutes);
+  const io = require("socket.io")(server, {
+    cors: {
+      origin: "http://localhost:3000",
+    },
+  });
+  io.use(socketauth);
+  io.on("connection", socketRoutes);
 });
