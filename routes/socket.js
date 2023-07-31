@@ -7,11 +7,11 @@ exports.socketRoutes = (socket) => {
       .to(roomname)
       .emit("becamelive", { user: socket.user, msg: "JOINED" });
   });
-  socket.on("send", (message, roomname) => {
-    console.log(socket.adapter.rooms.get(roomname));
+  socket.on("send", (message, roomname, url) => {
     socket.to(roomname).emit("receive", {
       user: socket.user,
       msg: message,
+      url,
     });
   });
   socket.on("leaveroom", (roomname) => {

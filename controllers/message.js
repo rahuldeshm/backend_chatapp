@@ -3,6 +3,7 @@ const Message = require("../models/message");
 const User = require("../models/user");
 
 exports.newmessage = async (req, res, next) => {
+  console.log(req.body);
   try {
     const resp = await Message.create({
       userId: req.user.id,

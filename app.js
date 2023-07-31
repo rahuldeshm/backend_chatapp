@@ -13,12 +13,20 @@ const groupRoutes = require("./routes/group");
 const Usergroup = require("./models/usergroup");
 const { socketRoutes } = require("./routes/socket");
 const { socketauth } = require("./middleware/socketauth");
-// const { socketRoutes } = require("./routes/socket");
-// const { socketauth } = require("./middleware/socketauth");
+const uploadRoutes = require("./controllers/upload");
+const multer = require("multer");
 
 const app = express();
+const upload = multer();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+
+app.use(
+  "/upload",
+  upload.single("file"),
+  authenticate,
+  uploadRoutes.newmessagefile
+);
 
 app.use(bodyParser.json({ extended: true }));
 
